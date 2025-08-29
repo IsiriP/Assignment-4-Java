@@ -7,7 +7,6 @@ public class SmartLoanMain {
 
     private static Map<LoanType, List<LoanApplication>> processedApps = new HashMap<>();
 
-    // Generic method
     public static <T extends LoanApplication> void printApplications(List<T> apps, String title) {
         System.out.println("\n--- " + title + " ---");
         for (T app : apps) {
@@ -15,7 +14,6 @@ public class SmartLoanMain {
         }
     }
 
-    // Reflection for AuditLog
     public static void printAuditedMethods(Class<?> clazz) {
         System.out.println("\n--- Audited Methods ---");
         for (Method method : clazz.getDeclaredMethods()) {
@@ -26,7 +24,6 @@ public class SmartLoanMain {
     }
 
     public static void main(String[] args) {
-        // LoanProcessor using lambda
         LoanProcessor processor = (app) -> {
             if (app.validateApplication()) {
                 app.apply();
@@ -36,7 +33,6 @@ public class SmartLoanMain {
             }
         };
 
-        // Create applications
         List<LoanApplication> apps = Arrays.asList(
                 new HomeLoan("Alice", 4000000),
                 new HomeLoan("Bob", 6000000),
@@ -44,7 +40,6 @@ public class SmartLoanMain {
                 new PersonalLoan("David", 700000)
         );
 
-        // Process each
         for (LoanApplication app : apps) {
             try {
                 processor.process(app);
@@ -55,16 +50,12 @@ public class SmartLoanMain {
             }
         }
 
-        // Print all applications grouped by type
         for (LoanType type : processedApps.keySet()) {
             printApplications(processedApps.get(type), type + " LOANS");
         }
-
-        // Print audited methods
         printAuditedMethods(HomeLoan.class);
         printAuditedMethods(PersonalLoan.class);
 
-        // Bonus: Sort apps by amount
         System.out.println("\n--- Sorted Applications by Amount ---");
         apps.stream().sorted((a, b) -> Double.compare(b.amount, a.amount))
                 .forEach(System.out::println);
